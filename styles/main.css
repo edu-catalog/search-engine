@@ -1,0 +1,120 @@
+:root{--primary-blue:#1E63F0;--light-blue:#f2f6ff;--text-dark:#1a1a1a;}
+*{box-sizing:border-box}
+body{font-family:"Segoe UI",Roboto,Arial,sans-serif;margin:0;background:var(--light-blue);color:var(--text-dark)}
+header{background:#fff;box-shadow:0 2px 6px rgba(30,99,240,.15);padding:1.5rem 1rem;position:sticky;top:0;z-index:10}
+h1{margin:0 0 1rem;color:var(--primary-blue);text-align:center}
+
+/* Кнопки */
+.region-buttons{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;margin-bottom:1rem}
+.region-button{border:2px solid var(--primary-blue);background:#fff;color:var(--primary-blue);padding:.6rem 1.2rem;border-radius:999px;font-weight:600;cursor:pointer;transition:.2s}
+.region-button.active,.region-button:hover,.region-button:focus{background:var(--primary-blue);color:#fff;outline:0;box-shadow:0 0 0 4px rgba(30,99,240,.15)}
+
+/* Поиск */
+.search-container{max-width:960px;margin:0 auto}
+.search-container label{display:block;font-weight:600;margin-bottom:.5rem;color:var(--primary-blue)}
+.search-input{width:100%;padding:.75rem 1rem;border:2px solid var(--primary-blue);border-radius:12px;font-size:1rem}
+.search-input:focus{outline:0;box-shadow:0 0 0 4px rgba(30,99,240,.15)}
+
+main{max-width:1200px;margin:0 auto;padding:2rem 1rem 3rem}
+
+/* ===== ДЕСКТОП ===== */
+table.catalog{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(30,99,240,.12);
+  table-layout:fixed;
+}
+thead{background:var(--primary-blue);color:#fff}
+th,td{padding:1.25rem 1rem;vertical-align:top;text-align:left}
+
+/* сетка: 60px / 40% / 60% (только для десктопа) */
+.catalog th:nth-child(1), .catalog td:nth-child(1){width:60px;text-align:center;font-weight:600}
+.catalog th:nth-child(2), .catalog td:nth-child(2){width:40%}
+.catalog th:nth-child(3), .catalog td:nth-child(3){width:60%}
+
+tbody tr:nth-child(even){background:rgba(30,99,240,.04)}
+tbody tr:hover{background:rgba(30,99,240,.08)}
+
+.institution-name{font-size:1.05rem;font-weight:700;margin-bottom:.75rem}
+.contact-list{margin:0;padding:0;list-style:none}
+.contact-list li{margin-bottom:.35rem;line-height:1.4}
+a{color:var(--primary-blue);text-decoration:none;font-weight:600}
+a:hover,a:focus{text-decoration:underline}
+.specializations{margin:0;padding-left:1.1rem}
+.empty-state{text-align:center;padding:2rem;color:#4a4a4a}
+
+/* разделитель ВПО */
+.table-subhead th{padding:.9rem 1rem;background:var(--primary-blue);color:#fff;font-weight:700}
+.table-subhead th:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px;width:60px;text-align:center}
+.table-subhead th:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
+
+/* перенос длинных ссылок/текста */
+.contact-list a, .specializations li{word-break:break-word;overflow-wrap:anywhere}
+
+/* ===== МОБИЛЬНАЯ ВЕРСТКА ===== */
+@media (max-width: 768px) {
+  /* сбрасываем десктопные ширины ПОЛНОСТЬЮ */
+  .catalog{display:block;overflow-x:hidden;-webkit-overflow-scrolling:touch;border-radius:12px;background:#fff;table-layout:auto}
+  .catalog thead{display:none}
+
+  /* ВАЖНО: делаем все ячейки на 100% и перебиваем nth-child ширины */
+  .catalog th, .catalog td{width:100% !important}
+  .catalog tbody, .catalog tr, .catalog td{display:block;width:100%}
+  .catalog tbody tr{
+    margin-bottom:1rem;
+    border:1px solid rgba(30,99,240,.12);
+    border-radius:12px;
+    overflow:hidden;
+    background:#fff;
+  }
+
+  /* подпись (data-label) сверху, чтобы текст не резался */
+  .catalog td{display:block;padding:.9rem 1rem}
+  .catalog td::before{
+    content:attr(data-label);
+    display:block;
+    margin-bottom:.5rem;
+    font-weight:700;
+    color:var(--primary-blue);
+  }
+
+  /* первая «ячейка» — номер записи */
+  .catalog td:nth-child(1){
+    font-size:1.05rem;
+    background:rgba(30,99,240,.04);
+    padding:.6rem 1rem;
+  }
+
+  /* разделитель ВПО как блок */
+  .table-subhead{display:block;margin:0 0 .5rem;border-radius:10px;overflow:hidden}
+  .table-subhead th{display:block;padding:.7rem .9rem;background:var(--primary-blue);color:#fff;font-weight:700}
+}
+
+/* ещё компактнее */
+@media (max-width: 420px){
+  .catalog td{padding:.7rem .8rem}
+  .catalog td::before{margin-bottom:.4rem;font-size:.95rem}
+}
+.hidden-region {
+  display: none;
+}
+
+.region-toggle {
+  display: block;
+  margin: 0 auto 1rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: 2px solid var(--primary-blue);
+  background: #fff;
+  color: var(--primary-blue);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.region-toggle:hover {
+  background: var(--primary-blue);
+  color: #fff;
+}
