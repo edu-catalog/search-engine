@@ -6,8 +6,23 @@
    Задача файла: сделать так, чтобы поиск воспринимался как прямое
    продолжение личного кабинета «Мой путь» (те же токены, что и в ЛК).
 
-   Что добавлено сверх косметики (см. также комментарий в самом низу
-   файла с опциональным JS-сниппетом для кнопки «В личный кабинет»):
+   ---------------------------------------------------------------
+   ПРАВКА v2 (точечная, по ТЗ) — 3 изменения, без затрагивания
+   структуры/JS/данных:
+   1) Деликатная полосатая заливка строк (кремовый / едва зеленоватый).
+   2) Номер записи — самостоятельный зелёный элемент («бейдж»),
+      реализован через background-image (SVG data-uri), без новых
+      HTML-узлов — той же техникой, что уже используется для иконки
+      поиска в .search-input.
+   3) Больше воздуха: увеличены padding у th/td, отступы внутри
+      записи (institution-name, contact-list, specializations).
+   Изменения помечены комментарием "// v2" рядом с затронутыми
+   правилами, чтобы было легко найти diff.
+   ---------------------------------------------------------------
+
+   Что было добавлено сверх косметики ранее (см. также комментарий
+   в самом низу файла с опциональным JS-сниппетом для кнопки
+   «В личный кабинет»):
    - иконка поиска и в .empty-state — только через CSS (background-image),
      HTML не менялся;
    - на мобильных первая колонка таблицы (обычно № / индекс записи)
@@ -34,6 +49,11 @@
   --shadow-soft:0 12px 28px -16px rgba(27,28,21,.25);
   --radius:22px;
   --ease:cubic-bezier(.22,1,.36,1);
+
+  /* v2: очень деликатная полосатость строк — кремовый / едва
+     зеленоватый оттенок, без серых полос */
+  --row-odd: var(--cream);
+  --row-even: rgba(140,185,59,.055);
 
   /* старые имена переменных сохранены для совместимости —
      если где-то в HTML есть инлайновые style="color:var(--primary-blue)"
@@ -184,33 +204,56 @@ th{
   letter-spacing:.04em;
   text-transform:uppercase;
 }
-th,td{padding:1.15rem 1.1rem;vertical-align:top;text-align:left}
+/* v2: больше воздуха — было 1.15rem 1.1rem */
+th,td{padding:1.5rem 1.2rem;vertical-align:top;text-align:left}
 
 .catalog th:nth-child(1), .catalog td:nth-child(1){width:64px;text-align:center;font-weight:700}
 .catalog th:nth-child(2), .catalog td:nth-child(2){width:40%}
 .catalog th:nth-child(3), .catalog td:nth-child(3){width:60%}
 
 tbody tr{transition:background .2s var(--ease)}
-tbody tr:nth-child(even){background:rgba(27,28,21,.025)}
+/* v2: деликатная полосатость — кремовый / едва зеленоватый, вместо
+   ранее использованных серых оттенков */
+tbody tr:nth-child(odd){background:var(--row-odd)}
+tbody tr:nth-child(even){background:var(--row-even)}
 tbody tr:hover{background:var(--green-soft)}
+
+/* v2: номер записи — самостоятельный зелёный «бейдж».
+   Реализовано через background-image (SVG-скруглённый прямоугольник,
+   тон --green-soft), без изменения HTML — та же техника, что и
+   у иконки поиска выше. Цифра поверх — тёмно-зелёная, Unbounded. */
+.catalog td:nth-child(1){
+  vertical-align:middle;
+  font-family:'Unbounded',sans-serif;
+  font-weight:700;
+  font-size:.95rem;
+  color:var(--green-deep);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect x='1' y='1' width='38' height='38' rx='12' fill='%23D9E8B8'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:40px 40px;
+}
 
 .institution-name{
   font-family:'Unbounded',sans-serif;
   font-weight:700;
   font-size:1.02rem;
   color:var(--ink);
-  margin-bottom:.7rem;
+  /* v2: было .7rem — больше воздуха между названием и остальным */
+  margin-bottom:.95rem;
   line-height:1.35;
 }
 .contact-list{margin:0;padding:0;list-style:none}
-.contact-list li{margin-bottom:.4rem;line-height:1.5;font-size:.92rem;color:#3a3b30}
+/* v2: было .4rem */
+.contact-list li{margin-bottom:.55rem;line-height:1.5;font-size:.92rem;color:#3a3b30}
 
 a{color:var(--green-deep);text-decoration:none;font-weight:700;transition:color .2s ease}
 a:hover,a:focus{text-decoration:underline;color:var(--ink)}
 a:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:3px}
 
 .specializations{margin:0;padding-left:1.1rem;color:#3a3b30}
-.specializations li{margin-bottom:.3rem;line-height:1.5;font-size:.92rem}
+/* v2: было .3rem */
+.specializations li{margin-bottom:.45rem;line-height:1.5;font-size:.92rem}
 .specializations li::marker{color:var(--green)}
 
 .empty-state{
@@ -255,11 +298,14 @@ a:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius
   .catalog th, .catalog td{width:100% !important}
   .catalog tbody, .catalog tr, .catalog td{display:block;width:100%}
   .catalog tbody tr{
-    margin-bottom:14px;
+    /* v2: было 14px — чуть больше воздуха между карточками */
+    margin-bottom:16px;
     border:none;
     border-radius:16px;
     overflow:hidden;
-    background:var(--white);
+    /* v2: background:var(--white) убран — карточка теперь наследует
+       деликатную полосатость от tbody tr:nth-child(odd/even) выше,
+       вместо того чтобы всегда быть белой */
     box-shadow:var(--shadow-soft);
     transition:box-shadow .25s var(--ease),transform .2s var(--ease);
     animation:cardIn .4s var(--ease) both;
@@ -274,7 +320,8 @@ a:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius
 
   @keyframes cardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-  .catalog td{display:block;padding:.85rem 1rem}
+  /* v2: было .85rem 1rem — чуть больше воздуха внутри карточки */
+  .catalog td{display:block;padding:1rem 1.1rem}
   .catalog td::before{
     content:attr(data-label);
     display:block;
@@ -288,13 +335,19 @@ a:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius
   }
 
   /* первая ячейка (обычно № / индекс) — акцентная плашка сверху карточки,
-     весь текст (включая подпись) сохранён, просто визуально выделен */
+     весь текст (включая подпись) сохранён, просто визуально выделен.
+     v2: цифра сделана заметнее (Unbounded, жирнее, тон --green-deep),
+     чтобы номер хорошо читался и на мобильном. */
   .catalog td:nth-child(1){
     display:flex !important;
     align-items:center;
     gap:8px;
     background:var(--green-soft);
-    padding:.65rem 1rem !important;
+    padding:.75rem 1.1rem !important;
+    font-family:'Unbounded',sans-serif;
+    font-weight:800;
+    font-size:1.05rem;
+    color:var(--green-deep);
   }
   .catalog td:nth-child(1)::before{margin-bottom:0;color:var(--green-deep)}
 
@@ -309,7 +362,7 @@ a:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius
 }
 
 @media (max-width: 420px){
-  .catalog td{padding:.7rem .85rem}
+  .catalog td{padding:.85rem .95rem}
   .catalog td::before{margin-bottom:.35rem;font-size:10px}
 }
 
